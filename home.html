@@ -3,35 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Accueil</title>
+    <title>Portfolio - Suarez Joris</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Suarez Joris</h1>
-        <nav>
-            <ul>
-                <li><a href="/HTML_PAGES/#about">À propos</a></li>
-                <li><a href="/HTML_PAGES/#portfolio">Portfolio</a></li>
-                <li><a href="/HTML_PAGES/#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-    
-    <section id="about">
-        <h2>À propos de moi</h2>
-        <p>Bienvenue sur mon portfolio ! Ici, vous trouverez mes projets et expériences.</p>
-    </section>
-    
-    <section id="portfolio">
-        <h2>Mes projets</h2>
-        <div class="gallery">
-            <p>Les projets seront affichés ici.</p>
-        </div>
-    </section>
-    
-    <footer>
-        <p>&copy; 2025 Mon Nom - Tous droits réservés</p>
-    </footer>
+    <div class="container">
+        <!-- Barre latérale -->
+        <aside class="sidebar">
+            <div class="logo">SJ</div>
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#works">Works</a></li>
+                    <li><a href="#blogs">Blogs</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="social-icons">
+                <a href="#"><img src="assets/behance.svg" alt="Behance"></a>
+                <a href="#"><img src="assets/dribbble.svg" alt="Dribbble"></a>
+                <a href="#"><img src="assets/instagram.svg" alt="Instagram"></a>
+            </div>
+            <footer class="sidebar-footer">
+                <p>&copy; 2025 Suarez Joris. Tous droits réservés.</p>
+            </footer>
+        </aside>
+
+        <!-- Section principale -->
+        <main class="main-content" id="home">
+            <section class="intro">
+                <h1><span>MY NAME</span><br>IS <strong>JORIS SUAREZ</strong>...</h1>
+                <p class="subtitle">Développeur Web & Designer basé en France</p>
+                <a href="#contact" class="cta">Let’s talk with me <span>↗</span></a>
+                <div class="contact-info">
+                    <p>📞 +33 6 41 38 35 63</p>
+                    <p>📧 jorisartist@gmail.com</p>
+                </div>
+            </section>
+        </main>
+    </div>
 </body>
 </html>
