@@ -70,8 +70,8 @@ body {
 }
 
 .social-icons img {
-    width: 24px;
-    height: 24px;
+    width: 50px;
+    height: 50px;
 }
 
 /* Pied de page de la sidebar */
@@ -93,8 +93,9 @@ body {
 
 .intro {
     max-width: 600px;
-    text-align: center;
+    text-align: left;
 }
+
 
 .intro h1 {
     font-size: 2.5rem;
@@ -113,6 +114,15 @@ body {
 .subtitle {
     font-style: italic;
     margin-bottom: 2rem;
+}
+
+.intro,
+.intro h1,
+.intro span,
+.intro strong,
+.intro .subtitle,
+.intro .contact-info {
+    color: #fff;
 }
 
 .cta {
@@ -134,4 +144,27 @@ body {
 .contact-info {
     margin-top: 2rem;
     font-size: 0.9rem;
+}
+
+/* Vidéo de fond */
+.background-video {
+    position: fixed;
+    top: 0;
+    left: 100px;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -2;
+    pointer-events: none;
+}
+
+/* Filtre foncé en overlay pour améliorer la lisibilité */
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Tu peux modifier l’opacité ici */
+    z-index: -1;
 }
