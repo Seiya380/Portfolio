@@ -186,19 +186,16 @@ body {
         position: relative;
         width: 100%;
         height: auto;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
-        padding: 1rem 1rem;
+        justify-content: center;
+        padding: 1rem;
+        gap: 1rem;
     }
 
     .logo {
-        margin: 0;
         font-size: 1.2rem;
-    }
-
-    .nav-links {
-        flex: 1;
+        margin: 0.5rem 0;
     }
 
     .nav-links ul {
@@ -209,8 +206,10 @@ body {
     }
 
     .social-icons {
+        display: flex;
+        justify-content: center;
+        margin: 0.5rem 0;
         gap: 0.5rem;
-        margin: 0;
     }
 
     .social-icons img {
@@ -225,25 +224,38 @@ body {
     .main-content {
         margin-left: 0;
         padding: 2rem 1rem;
-        justify-content: flex-start;
+        display: flex;
+        justify-content: center;
         text-align: center;
     }
+    
+    .intro {
+        text-align: center;
+        padding-top: 2rem;
+        max-width: 100%;
+    }
+    
 
     .intro h1 {
         font-size: 2rem;
     }
 
-    .intro .subtitle {
+    .subtitle {
         font-size: 1rem;
+        margin-bottom: 1.5rem;
     }
 
-    .intro .contact-info {
+    .contact-info {
         font-size: 1rem;
     }
 
     .background-video {
+        top: 0;
         left: 0;
         width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        transform: translateY(100px); /* ajuste ici selon le rendu désiré */
     }
+    
 }
-
