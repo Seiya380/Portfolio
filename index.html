@@ -7,46 +7,32 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <video autoplay muted loop playsinline class="background-video">
-        <source src="assets/mylivewallpapers.com-Crystal-Cube.mp4" type="video/mp4">
-        Ton navigateur ne supporte pas les vidéos HTML5.
-    </video>
-    <div class="background-overlay"></div>    
-    <div class="container">
-        <!-- Barre latérale -->
-        <aside class="sidebar">
-            <div class="logo">SJ</div>
-            <nav class="nav-links">
-                <ul>
-                    <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="HTML_PAGES/about.html">About</a></li>
-                    <li><a href="HTML_PAGES/services.html">Services</a></li>
-                    <li><a href="HTML_PAGES/works.html">Works</a></li>
-                    <li><a href="HTML_PAGES/blogs.html">Blogs</a></li>
-                    <li><a href="HTML_PAGES/contact.html">Contact</a></li>
-                </ul>
-            </nav>
-            <div class="social-icons">
-                <a href="#"><img src="assets/dribble.png" alt="Dribbble"></a>
-                <a href="https://www.instagram.com/suarezjoris/"><img src="assets/instagram.png" alt="Instagram"></a>
-            </div>
-            <footer class="sidebar-footer">
-                <p>&copy; 2025 Suarez Joris. Tous droits réservés.</p>
-            </footer>
-        </aside>
+    <div class="overlay"></div>
 
-        <!-- Section principale -->
-        <main class="main-content" id="home">
-            <section class="intro">
-                <h1><span>MY NAME</span><br>IS <strong>JORIS SUAREZ</strong>...</h1>
-                <p class="subtitle">Développeur Web & Designer basé en France</p>
-                <a href="HTML_PAGES/contact.html" class="cta">Let’s talk with me <span>↗</span></a>
-                <div class="contact-info">
-                    <p>📞 +33 6 41 38 35 63</p>
-                    <p>📧 jorisartist@gmail.com</p>
-                </div>
-            </section>
-        </main>
-    </div>
+    <header class="top-nav">
+        <div class="logo">SJ</div>
+        <nav>
+            <ul>
+                <li><a href="HTML_PAGES/about.html">About</a></li>
+                <li><a href="HTML_PAGES/services.html">Services</a></li>
+                <li><a href="HTML_PAGES/works.html">Works</a></li>
+                <li><a href="HTML_PAGES/blogs.html">Blogs</a></li>
+                <li><a href="HTML_PAGES/contact.html">Contact</a></li>
+
+            </ul>
+        </nav>
+    </header>
+
+    <main class="hero">
+        <section class="intro">
+            <p class="subtitle">Hey, I'm Joris Suarez</p>
+            <h1>Développeur Web & UI Designer</h1>
+            <p class="experience"><em>Passionné depuis 2017</em></p>
+            <div class="social-buttons">
+                <a href="#" class="btn behance">Behance</a>
+                <a href="https://www.instagram.com/suarezjoris/" target="_blank" class="btn dribbble">Instagram</a>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
