@@ -29,8 +29,9 @@ body {
     background-size: 400% 400%;
     animation: gradientShift 45s ease infinite;
     color: var(--text-light);
-    padding: 7rem 2rem 2rem;
-    overflow: hidden;
+    padding: 6rem 2rem 2rem;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* ===== ANIMATIONS ===== */
@@ -609,7 +610,7 @@ body::after {
     .works-container {
         grid-template-columns: 1fr;
         height: auto;
-        padding-top: 5rem;
+        padding-top: 1rem;
     }
 
     .sidebar {
@@ -619,91 +620,190 @@ body::after {
 
     .social-preview.github-preview {
         margin: 0 auto;
-        max-width: 280px;
-        aspect-ratio: 1;
+        max-width: 200px;
+        aspect-ratio: auto;
+        padding: 1.25rem;
+        overflow: hidden;
     }
 
     .github-preview .social-avatar {
-        width: 70px;
-        height: 70px;
-        font-size: 1.5rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+
+    .github-preview .social-username {
+        font-size: 0.95rem;
+    }
+
+    .github-preview .social-cta {
+        padding: 0.5rem 0.85rem;
+        font-size: 0.8rem;
     }
 
     .projects-section {
-        height: 60vh;
+        height: auto;
+        overflow: visible;
     }
 
     .projects-section::before,
     .projects-section::after {
-        height: 40px;
+        display: none;
+    }
+
+    .projects-scroll-container {
+        height: auto;
+        overflow: visible;
+        padding: 0;
     }
 }
 
 @media screen and (max-width: 768px) {
     body {
-        padding: 1.5rem;
-    }
-
-    .back-link {
-        top: 1.5rem;
-        left: 1.5rem;
-        padding: 0.6rem 1.2rem;
-        font-size: 0.85rem;
+        padding: 7rem 1rem 2rem;
     }
 
     .works-container {
-        gap: 2rem;
-        padding-top: 4rem;
+        gap: 1.5rem;
+        padding-top: 0.5rem;
+    }
+
+    .section-header {
+        margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.8rem;
+        letter-spacing: 2px;
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .section-desc {
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+
+    .social-preview.github-preview {
+        max-width: 180px;
+        aspect-ratio: auto;
+        padding: 1rem;
+        border-radius: 16px;
+        animation: none;
+        overflow: hidden;
+    }
+
+    .github-preview .social-header {
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .github-preview .social-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    .github-preview .social-username {
+        font-size: 0.85rem;
+    }
+
+    .github-preview .social-label {
+        font-size: 0.7rem;
+    }
+
+    .github-preview .social-icon {
+        width: 18px;
+        height: 18px;
+        top: 0.6rem;
+        right: 0.6rem;
+    }
+
+    .github-preview .social-cta {
+        padding: 0.45rem 0.6rem;
+        font-size: 0.7rem;
+        border-radius: 8px;
+    }
+
+    .projects-grid {
+        gap: 1rem;
     }
 
     .project-card {
         flex-direction: column;
         align-items: stretch;
+        padding: 1rem;
+        border-radius: 14px;
     }
 
     .project-icon {
-        width: 50px;
-        height: 50px;
-    }
-
-    .project-link {
-        align-self: flex-end;
-        margin-top: 0.5rem;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    body {
-        padding: 1rem;
-    }
-
-    .back-link {
-        top: 1rem;
-        left: 1rem;
-    }
-
-    .section-subtitle {
-        font-size: 0.7rem;
-    }
-
-    .section-title {
-        font-size: 1.75rem;
-    }
-
-    .project-card {
-        padding: 1.25rem;
+        width: 42px;
+        height: 42px;
+        font-size: 1.2rem;
+        border-radius: 10px;
     }
 
     .project-title {
-        font-size: 1.05rem;
+        font-size: 1rem;
     }
 
     .project-desc {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
+    }
+
+    .tag {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.65rem;
+    }
+
+    .project-link {
+        width: 34px;
+        height: 34px;
+        align-self: flex-end;
+        margin-top: 0.5rem;
+    }
+
+    .project-link svg {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    body {
+        padding: 6.5rem 0.75rem 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+    }
+
+    .section-desc {
+        font-size: 0.8rem;
+    }
+
+    .social-preview.github-preview {
+        max-width: 140px;
+    }
+
+    .project-card {
+        padding: 0.85rem;
+    }
+
+    .project-title {
+        font-size: 0.9rem;
+    }
+
+    .project-desc {
+        font-size: 0.75rem;
     }
 }
 

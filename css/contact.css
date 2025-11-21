@@ -210,35 +210,123 @@
 
 @media screen and (max-width: 768px) {
     .contact-page {
-        padding: 10rem 1.5rem 3rem;
+        padding: 6rem 1rem 2rem;
+    }
+
+    .contact-header {
+        margin-bottom: 2rem;
     }
 
     .contact-header h1 {
-        font-size: 2rem;
-    }
-
-    .contact-card {
-        padding: 1.5rem;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .contact-header h1 {
-        font-size: 1.75rem;
-        letter-spacing: -1px;
+        font-size: 1.8rem;
     }
 
     .contact-subtitle {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
+    }
+
+    .contact-grid {
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .contact-card {
+        padding: 1.25rem;
+        border-radius: 16px;
+    }
+
+    .card-icon {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 1rem;
+        border-radius: 12px;
+    }
+
+    .card-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .contact-card h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .contact-link,
+    .contact-info {
+        font-size: 0.85rem;
+    }
+
+    .social-link {
+        width: 38px;
+        height: 38px;
+    }
+
+    .social-link svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .interests-section h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
     }
 
     .interests-grid {
-        grid-template-columns: repeat(2, 1fr);
         gap: 0.75rem;
     }
 
     .interest-card {
-        padding: 1.25rem 0.75rem;
+        padding: 1rem 0.75rem;
+        border-radius: 12px;
+    }
+
+    .interest-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+    }
+
+    .interest-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .interest-card span {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .contact-page {
+        padding: 5.5rem 0.75rem 1.5rem;
+    }
+
+    .contact-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .contact-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .contact-card {
+        padding: 1rem;
+    }
+
+    .card-icon {
+        width: 44px;
+        height: 44px;
+    }
+
+    .interests-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    .interest-card {
+        padding: 0.85rem 0.5rem;
     }
 
     .interest-card span {
