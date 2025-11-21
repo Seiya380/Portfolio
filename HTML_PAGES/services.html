@@ -1,1 +1,199 @@
-D
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Suarez Joris</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../css/services.css">
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="logo-container">
+            <div class="logo-glass">
+                <span class="logo-text">SJ</span>
+            </div>
+        </a>
+        <nav class="nav">
+            <a href="about.html" data-fr="A propos" data-en="About">A propos</a>
+            <a href="services.html" data-fr="Services" data-en="Services">Services</a>
+            <a href="works.html" data-fr="Travaux" data-en="Works">Travaux</a>
+            <a href="blogs.html" data-fr="Blog" data-en="Blogs">Blog</a>
+            <a href="contact.html" data-fr="Contact" data-en="Contact">Contact</a>
+        </nav>
+        <div class="lang-switcher">
+            <button onclick="switchLang('fr')" class="active">FR</button>
+            <button onclick="switchLang('en')">EN</button>
+        </div>
+    </header>
+
+    <div class="services-container">
+        <header class="services-header">
+            <h2 class="section-subtitle" data-fr="MES PRESTATIONS" data-en="MY SERVICES">MES PRESTATIONS</h2>
+            <h1 class="section-title">Services</h1>
+            <p class="section-desc" data-fr="Des solutions adaptées à vos besoins, de la création web au conseil personnalisé." data-en="Tailored solutions for your needs, from web creation to personalized consulting.">Des solutions adaptées à vos besoins, de la création web au conseil personnalisé.</p>
+        </header>
+
+        <div class="pricing-grid">
+            <!-- Website Creation Card -->
+            <article class="pricing-card featured">
+                <div class="card-badge" data-fr="Populaire" data-en="Popular">Populaire</div>
+                <div class="card-icon">🌐</div>
+                <h3 class="card-title" data-fr="Création Web" data-en="Web Development">Création Web</h3>
+                <p class="card-desc" data-fr="Site vitrine, portfolio ou landing page sur mesure avec design moderne et responsive." data-en="Showcase website, portfolio or custom landing page with modern responsive design.">Site vitrine, portfolio ou landing page sur mesure avec design moderne et responsive.</p>
+                <div class="card-price">
+                    <span class="price-label" data-fr="À partir de" data-en="Starting from">À partir de</span>
+                    <span class="price-value" data-fr="Sur Devis" data-en="Quote">Sur Devis</span>
+                </div>
+                <ul class="card-features">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Design personnalisé" data-en="Custom design">Design personnalisé</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Responsive mobile" data-en="Mobile responsive">Responsive mobile</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Optimisation SEO" data-en="SEO optimization">Optimisation SEO</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Hébergement conseillé" data-en="Hosting advice">Hébergement conseillé</span>
+                    </li>
+                </ul>
+                <a href="contact.html" class="card-cta">
+                    <span data-fr="Demander un devis" data-en="Request a quote">Demander un devis</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </a>
+            </article>
+
+            <!-- Informatic Help Card -->
+            <article class="pricing-card highlight">
+                <div class="card-icon">💻</div>
+                <h3 class="card-title" data-fr="Aide Informatique" data-en="IT Support">Aide Informatique</h3>
+                <p class="card-desc" data-fr="Dépannage, installation, configuration et assistance technique personnalisée." data-en="Troubleshooting, installation, configuration and personalized technical support.">Dépannage, installation, configuration et assistance technique personnalisée.</p>
+                <div class="card-price fixed-price">
+                    <span class="price-value">80<span class="price-currency">€</span></span>
+                    <span class="price-label" data-fr="/ intervention" data-en="/ session">/ intervention</span>
+                </div>
+                <ul class="card-features">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Diagnostic complet" data-en="Full diagnostic">Diagnostic complet</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Installation logiciels" data-en="Software installation">Installation logiciels</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Nettoyage système" data-en="System cleanup">Nettoyage système</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Conseils personnalisés" data-en="Personalized advice">Conseils personnalisés</span>
+                    </li>
+                </ul>
+                <a href="contact.html" class="card-cta">
+                    <span data-fr="Me contacter" data-en="Contact me">Me contacter</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </a>
+            </article>
+
+            <!-- Design Card -->
+            <article class="pricing-card">
+                <div class="card-icon">🎨</div>
+                <h3 class="card-title">Design UI/UX</h3>
+                <p class="card-desc" data-fr="Création d'interfaces utilisateur modernes, maquettes et prototypes interactifs." data-en="Modern user interface creation, mockups and interactive prototypes.">Création d'interfaces utilisateur modernes, maquettes et prototypes interactifs.</p>
+                <div class="card-price">
+                    <span class="price-label" data-fr="À partir de" data-en="Starting from">À partir de</span>
+                    <span class="price-value" data-fr="Sur Devis" data-en="Quote">Sur Devis</span>
+                </div>
+                <ul class="card-features">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Maquettes Figma" data-en="Figma mockups">Maquettes Figma</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Prototypes cliquables" data-en="Clickable prototypes">Prototypes cliquables</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span>Design System</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Révisions incluses" data-en="Revisions included">Révisions incluses</span>
+                    </li>
+                </ul>
+                <a href="contact.html" class="card-cta">
+                    <span data-fr="Demander un devis" data-en="Request a quote">Demander un devis</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </a>
+            </article>
+
+            <!-- Consulting Card -->
+            <article class="pricing-card">
+                <div class="card-icon">💡</div>
+                <h3 class="card-title">Consulting</h3>
+                <p class="card-desc" data-fr="Accompagnement stratégique pour vos projets digitaux et conseils techniques." data-en="Strategic support for your digital projects and technical advice.">Accompagnement stratégique pour vos projets digitaux et conseils techniques.</p>
+                <div class="card-price">
+                    <span class="price-label" data-fr="À partir de" data-en="Starting from">À partir de</span>
+                    <span class="price-value" data-fr="Sur Devis" data-en="Quote">Sur Devis</span>
+                </div>
+                <ul class="card-features">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Audit de projet" data-en="Project audit">Audit de projet</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Recommandations" data-en="Recommendations">Recommandations</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Veille technologique" data-en="Technology watch">Veille technologique</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                        <span data-fr="Suivi personnalisé" data-en="Personalized follow-up">Suivi personnalisé</span>
+                    </li>
+                </ul>
+                <a href="contact.html" class="card-cta">
+                    <span data-fr="Prendre rendez-vous" data-en="Book a meeting">Prendre rendez-vous</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </a>
+            </article>
+        </div>
+    </div>
+
+    <script>
+        function switchLang(lang) {
+            localStorage.setItem('siteLang', lang);
+            applyLang(lang);
+        }
+
+        function applyLang(lang) {
+            document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+            document.querySelectorAll('.lang-switcher button').forEach(btn => {
+                btn.classList.remove('active');
+                if ((lang === 'fr' && btn.textContent === 'FR') || (lang === 'en' && btn.textContent === 'EN')) {
+                    btn.classList.add('active');
+                }
+            });
+            document.documentElement.lang = lang;
+        }
+
+        // Apply saved language on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('siteLang') || 'fr';
+            applyLang(savedLang);
+        });
+    </script>
+</body>
+</html>

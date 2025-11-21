@@ -1,1 +1,377 @@
-B
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Suarez Joris</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../css/blogs.css">
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="logo-container">
+            <div class="logo-glass">
+                <span class="logo-text">SJ</span>
+            </div>
+        </a>
+        <nav class="nav">
+            <a href="about.html" data-fr="A propos" data-en="About">A propos</a>
+            <a href="services.html" data-fr="Services" data-en="Services">Services</a>
+            <a href="works.html" data-fr="Travaux" data-en="Works">Travaux</a>
+            <a href="blogs.html" data-fr="Blog" data-en="Blogs">Blog</a>
+            <a href="contact.html" data-fr="Contact" data-en="Contact">Contact</a>
+        </nav>
+        <div class="header-actions">
+            <div class="lang-switcher">
+                <button onclick="switchLang('fr')" class="active">FR</button>
+                <button onclick="switchLang('en')">EN</button>
+            </div>
+            <button id="adminBtn" class="admin-btn" data-fr="Admin" data-en="Admin">Admin</button>
+        </div>
+    </header>
+
+    <main class="blog-page">
+        <section class="blog-header">
+            <h1 data-fr="Mon Blog" data-en="My Blog">Mon Blog</h1>
+            <p class="blog-subtitle" data-fr="Pensees, tutoriels et actualites" data-en="Thoughts, tutorials and news">Pensees, tutoriels et actualites</p>
+        </section>
+
+        <!-- Admin Panel (hidden by default) -->
+        <section id="adminPanel" class="admin-panel hidden">
+            <div class="admin-header">
+                <h2 data-fr="Creer un article" data-en="Create a post">Creer un article</h2>
+                <button id="logoutBtn" class="logout-btn" data-fr="Deconnexion" data-en="Logout">Deconnexion</button>
+            </div>
+            <form id="blogForm" class="blog-form">
+                <div class="form-group">
+                    <label for="postTitle" data-fr="Titre" data-en="Title">Titre</label>
+                    <input type="text" id="postTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="postContent" data-fr="Contenu" data-en="Content">Contenu</label>
+                    <textarea id="postContent" rows="6" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="postCategory" data-fr="Categorie" data-en="Category">Categorie</label>
+                    <select id="postCategory">
+                        <option value="tech" data-fr="Technologie" data-en="Technology">Technologie</option>
+                        <option value="design" data-fr="Design" data-en="Design">Design</option>
+                        <option value="tutorial" data-fr="Tutoriel" data-en="Tutorial">Tutoriel</option>
+                        <option value="news" data-fr="Actualites" data-en="News">Actualites</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn" data-fr="Publier" data-en="Publish">Publier</button>
+            </form>
+        </section>
+
+        <!-- Blog Posts Grid -->
+        <section class="blog-grid" id="blogGrid">
+            <!-- Posts will be dynamically inserted here -->
+        </section>
+
+        <div id="emptyState" class="empty-state hidden">
+            <p data-fr="Aucun article pour le moment" data-en="No posts yet">Aucun article pour le moment</p>
+        </div>
+    </main>
+
+    <!-- Post Detail Modal -->
+    <div id="postModal" class="modal hidden">
+        <div class="modal-content post-modal-content">
+            <button class="modal-close" onclick="closePostModal()">&times;</button>
+            <div id="postModalBody">
+                <!-- Post content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 data-fr="Connexion Admin" data-en="Admin Login">Connexion Admin</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="password" data-fr="Mot de passe" data-en="Password">Mot de passe</label>
+                    <input type="password" id="password" required>
+                </div>
+                <p id="loginError" class="error-msg hidden" data-fr="Mot de passe incorrect" data-en="Incorrect password">Mot de passe incorrect</p>
+                <button type="submit" class="submit-btn" data-fr="Connexion" data-en="Login">Connexion</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURATION =====
+        const ADMIN_PASSWORD = 'U2CNa$9&fAT8bO'; // Change this to your secure password
+
+        // ===== STATE =====
+        let isAdmin = false;
+
+        // ===== DOM ELEMENTS =====
+        const adminBtn = document.getElementById('adminBtn');
+        const adminPanel = document.getElementById('adminPanel');
+        const loginModal = document.getElementById('loginModal');
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
+        const blogForm = document.getElementById('blogForm');
+        const blogGrid = document.getElementById('blogGrid');
+        const emptyState = document.getElementById('emptyState');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const postModal = document.getElementById('postModal');
+        const postModalBody = document.getElementById('postModalBody');
+
+        // ===== BLOG STORAGE =====
+        function getBlogs() {
+            const blogs = localStorage.getItem('sjBlogs');
+            return blogs ? JSON.parse(blogs) : [];
+        }
+
+        function saveBlogs(blogs) {
+            localStorage.setItem('sjBlogs', JSON.stringify(blogs));
+        }
+
+        function addBlog(title, content, category) {
+            const blogs = getBlogs();
+            const newBlog = {
+                id: Date.now(),
+                title,
+                content,
+                category,
+                date: new Date().toISOString()
+            };
+            blogs.unshift(newBlog);
+            saveBlogs(blogs);
+            return newBlog;
+        }
+
+        function deleteBlog(id) {
+            const blogs = getBlogs().filter(blog => blog.id !== id);
+            saveBlogs(blogs);
+            renderBlogs();
+        }
+
+        // ===== RENDER FUNCTIONS =====
+        function renderBlogs() {
+            const blogs = getBlogs();
+            blogGrid.innerHTML = '';
+
+            if (blogs.length === 0) {
+                emptyState.classList.remove('hidden');
+                blogGrid.classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            blogGrid.classList.remove('hidden');
+
+            blogs.forEach(blog => {
+                const card = createBlogCard(blog);
+                blogGrid.appendChild(card);
+            });
+
+            // Reapply language
+            const savedLang = localStorage.getItem('siteLang') || 'fr';
+            applyLang(savedLang);
+        }
+
+        const categoryLabels = {
+            tech: { fr: 'Technologie', en: 'Technology' },
+            design: { fr: 'Design', en: 'Design' },
+            tutorial: { fr: 'Tutoriel', en: 'Tutorial' },
+            news: { fr: 'Actualites', en: 'News' }
+        };
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        function createBlogCard(blog) {
+            const card = document.createElement('article');
+            card.className = 'blog-card';
+            card.style.cursor = 'pointer';
+            card.onclick = () => openPost(blog.id);
+
+            const formattedDate = formatDate(blog.date);
+
+            card.innerHTML = `
+                <div class="card-category" data-category="${blog.category}">
+                    <span data-fr="${categoryLabels[blog.category]?.fr || blog.category}"
+                          data-en="${categoryLabels[blog.category]?.en || blog.category}">
+                        ${categoryLabels[blog.category]?.fr || blog.category}
+                    </span>
+                </div>
+                <h3 class="card-title">${escapeHtml(blog.title)}</h3>
+                <p class="card-content">${escapeHtml(blog.content)}</p>
+                <div class="card-footer">
+                    <span class="card-date">${formattedDate}</span>
+                    <span class="read-more" data-fr="Lire plus" data-en="Read more">Lire plus</span>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // ===== POST MODAL FUNCTIONS =====
+        function openPost(id) {
+            const blogs = getBlogs();
+            const blog = blogs.find(b => b.id === id);
+            if (!blog) return;
+
+            const formattedDate = formatDate(blog.date);
+            const savedLang = localStorage.getItem('siteLang') || 'fr';
+
+            postModalBody.innerHTML = `
+                <div class="post-detail">
+                    <div class="card-category" data-category="${blog.category}">
+                        <span data-fr="${categoryLabels[blog.category]?.fr || blog.category}"
+                              data-en="${categoryLabels[blog.category]?.en || blog.category}">
+                            ${categoryLabels[blog.category]?.[savedLang] || blog.category}
+                        </span>
+                    </div>
+                    <h2 class="post-title">${escapeHtml(blog.title)}</h2>
+                    <span class="post-date">${formattedDate}</span>
+                    <div class="post-content">${escapeHtml(blog.content).replace(/\n/g, '<br>')}</div>
+                    ${isAdmin ? `
+                        <div class="post-actions">
+                            <button class="delete-btn delete-btn-large" onclick="deletePostAndClose(${blog.id})" data-fr="Supprimer cet article" data-en="Delete this post">
+                                ${savedLang === 'fr' ? 'Supprimer cet article' : 'Delete this post'}
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            postModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePostModal() {
+            postModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function deletePostAndClose(id) {
+            if (confirm(localStorage.getItem('siteLang') === 'en' ? 'Delete this post?' : 'Supprimer cet article ?')) {
+                deleteBlog(id);
+                closePostModal();
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ===== ADMIN FUNCTIONS =====
+        function showModal() {
+            loginModal.classList.remove('hidden');
+            document.getElementById('password').focus();
+        }
+
+        function closeModal() {
+            loginModal.classList.add('hidden');
+            loginError.classList.add('hidden');
+            document.getElementById('password').value = '';
+        }
+
+        function loginAdmin() {
+            isAdmin = true;
+            adminPanel.classList.remove('hidden');
+            adminBtn.classList.add('hidden');
+            closeModal();
+            renderBlogs();
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            adminPanel.classList.add('hidden');
+            adminBtn.classList.remove('hidden');
+            renderBlogs();
+        }
+
+        // ===== EVENT LISTENERS =====
+        adminBtn.addEventListener('click', showModal);
+        logoutBtn.addEventListener('click', logoutAdmin);
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+
+            if (password === ADMIN_PASSWORD) {
+                loginAdmin();
+            } else {
+                loginError.classList.remove('hidden');
+                document.getElementById('password').value = '';
+            }
+        });
+
+        blogForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('postTitle').value;
+            const content = document.getElementById('postContent').value;
+            const category = document.getElementById('postCategory').value;
+
+            addBlog(title, content, category);
+            blogForm.reset();
+            renderBlogs();
+        });
+
+        // Close modal on outside click
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                closeModal();
+            }
+        });
+
+        postModal.addEventListener('click', (e) => {
+            if (e.target === postModal) {
+                closePostModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (!loginModal.classList.contains('hidden')) {
+                    closeModal();
+                }
+                if (!postModal.classList.contains('hidden')) {
+                    closePostModal();
+                }
+            }
+        });
+
+        // ===== LANGUAGE FUNCTIONS =====
+        function switchLang(lang) {
+            localStorage.setItem('siteLang', lang);
+            applyLang(lang);
+        }
+
+        function applyLang(lang) {
+            document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+            document.querySelectorAll('.lang-switcher button').forEach(btn => {
+                btn.classList.remove('active');
+                if ((lang === 'fr' && btn.textContent === 'FR') || (lang === 'en' && btn.textContent === 'EN')) {
+                    btn.classList.add('active');
+                }
+            });
+            document.documentElement.lang = lang;
+        }
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('siteLang') || 'fr';
+            applyLang(savedLang);
+            renderBlogs();
+        });
+    </script>
+</body>
+</html>

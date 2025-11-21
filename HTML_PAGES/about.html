@@ -4,59 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>À propos - Suarez Joris</title>
+    <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="../css/about.css">
 </head>
 <body>
-    <div class="lang-switcher">
-        <button onclick="switchLang('fr')">Français</button>
-        <button onclick="switchLang('en')">English</button>
-    </div>
+    <header class="header">
+        <a href="../index.html" class="logo-container">
+            <div class="logo-glass">
+                <span class="logo-text">SJ</span>
+            </div>
+        </a>
+        <nav class="nav">
+            <a href="about.html" data-fr="A propos" data-en="About">A propos</a>
+            <a href="services.html" data-fr="Services" data-en="Services">Services</a>
+            <a href="works.html" data-fr="Travaux" data-en="Works">Travaux</a>
+            <a href="blogs.html" data-fr="Blog" data-en="Blogs">Blog</a>
+            <a href="contact.html" data-fr="Contact" data-en="Contact">Contact</a>
+        </nav>
+        <div class="lang-switcher">
+            <button onclick="switchLang('fr')" class="active">FR</button>
+            <button onclick="switchLang('en')">EN</button>
+        </div>
+    </header>
 
     <div class="about-section">
-        <h2 class="section-subtitle" id="sub-fr">PREMIERS RÉSULTATS EN 7 JOURS</h2>
-        <h1 class="section-title" id="title-fr">Mon Processus de Travail</h1>
-        <p class="section-desc" id="desc-fr">Approche de design centrée utilisateur avec un développement rapide.</p>
-
-        <h2 class="section-subtitle hidden" id="sub-en">FIRST RESULTS WITHIN 7 DAYS</h2>
-        <h1 class="section-title hidden" id="title-en">My Work Process</h1>
-        <p class="section-desc hidden" id="desc-en">User-centric design approach with fast development.</p>
+        <h2 class="section-subtitle" data-fr="PREMIERS RÉSULTATS EN 7 JOURS" data-en="FIRST RESULTS WITHIN 7 DAYS">PREMIERS RÉSULTATS EN 7 JOURS</h2>
+        <h1 class="section-title" data-fr="Mon Processus de Travail" data-en="My Work Process">Mon Processus de Travail</h1>
+        <p class="section-desc" data-fr="Approche de design centrée utilisateur avec un développement rapide." data-en="User-centric design approach with fast development.">Approche de design centrée utilisateur avec un développement rapide.</p>
 
         <div class="cards-container">
             <div class="card">
                 <div class="icon">🌱</div>
-                <h3 id="card1-fr">Interview</h3>
-                <p id="card1-desc-fr">Comprendre les besoins réels commence ici. À travers des entretiens détaillés et des enquêtes complètes, j'essaye de cerner vos objectifs et les attentes de vos utilisateurs.</p>
-
-                <h3 class="hidden" id="card1-en">Interview</h3>
-                <p class="hidden" id="card1-desc-en">Understanding the heart of user needs begins here. Through detailed interviews and surveys, I dive deep into your business goals and user mindset.</p>
+                <h3 data-fr="Interview" data-en="Interview">Interview</h3>
+                <p data-fr="Comprendre les besoins réels commence ici. À travers des entretiens détaillés et des enquêtes complètes, j'essaye de cerner vos objectifs et les attentes de vos utilisateurs." data-en="Understanding the heart of user needs begins here. Through detailed interviews and surveys, I dive deep into your business goals and user mindset.">Comprendre les besoins réels commence ici. À travers des entretiens détaillés et des enquêtes complètes, j'essaye de cerner vos objectifs et les attentes de vos utilisateurs.</p>
             </div>
             <div class="card">
                 <div class="icon">🔍</div>
-                <h3 id="card2-fr">Recherche UX</h3>
-                <p id="card2-desc-fr">En analysant la concurrence et les cibles, je pose les bases d'une direction produit stratégique et orientée données.</p>
-
-                <h3 class="hidden" id="card2-en">UX Research</h3>
-                <p class="hidden" id="card2-desc-en">By conducting thorough competitor analyses and defining clear audiences, I set the stage for strategic product direction.</p>
+                <h3 data-fr="Recherche UX" data-en="UX Research">Recherche UX</h3>
+                <p data-fr="En analysant la concurrence et les cibles, je pose les bases d'une direction produit stratégique et orientée données." data-en="By conducting thorough competitor analyses and defining clear audiences, I set the stage for strategic product direction.">En analysant la concurrence et les cibles, je pose les bases d'une direction produit stratégique et orientée données.</p>
             </div>
             <div class="card">
                 <div class="icon">🎨</div>
-                <h3 id="card3-fr">Design UI</h3>
-                <p id="card3-desc-fr">Traduire les données en parcours utilisateur, wireframes, et prototypes interactifs. L'HTML, le CSS et JS donnent vie à tout ça.</p>
-
-                <h3 class="hidden" id="card3-en">UI Design</h3>
-                <p class="hidden" id="card3-desc-en">Translating data into user flows, wireframes, and interactive prototypes. HTML, CSS, and JS bring everything to life.</p>
+                <h3 data-fr="Design UI" data-en="UI Design">Design UI</h3>
+                <p data-fr="Traduire les données en parcours utilisateur, wireframes, et prototypes interactifs. L'HTML, le CSS et JS donnent vie à tout ça." data-en="Translating data into user flows, wireframes, and interactive prototypes. HTML, CSS, and JS bring everything to life.">Traduire les données en parcours utilisateur, wireframes, et prototypes interactifs. L'HTML, le CSS et JS donnent vie à tout ça.</p>
             </div>
         </div>
     </div>
 
     <script>
         function switchLang(lang) {
-            const all = document.querySelectorAll('[id^="sub-"], [id^="title-"], [id^="desc-"], [id^="card"]');
-            all.forEach(el => {
-                el.classList.add('hidden');
-                if (el.id.endsWith('-' + lang)) el.classList.remove('hidden');
-            });
+            localStorage.setItem('siteLang', lang);
+            applyLang(lang);
         }
+
+        function applyLang(lang) {
+            document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+            document.querySelectorAll('.lang-switcher button').forEach(btn => {
+                btn.classList.remove('active');
+                if ((lang === 'fr' && btn.textContent === 'FR') || (lang === 'en' && btn.textContent === 'EN')) {
+                    btn.classList.add('active');
+                }
+            });
+            document.documentElement.lang = lang;
+        }
+
+        // Apply saved language on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('siteLang') || 'fr';
+            applyLang(savedLang);
+        });
     </script>
 </body>
 </html>
