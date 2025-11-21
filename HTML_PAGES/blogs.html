@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog - Suarez Joris</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="../css/blogs.css">
 </head>
@@ -102,7 +103,19 @@
 
     <script>
         // ===== CONFIGURATION =====
-        const ADMIN_PASSWORD = 'U2CNa$9&fAT8bO'; // Change this to your secure password
+        // Password is securely hashed - no one can see the actual password
+        // To change password: open console, run: hashPassword('yournewpassword').then(console.log)
+        // Then replace the hash below
+        const ADMIN_PASSWORD_HASH = 'ac743779863ca13dc036df48159ac0a2af78a64a4664ce7c548c6cfb9448c159';
+
+        // ===== HASHING FUNCTION =====
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password + 'sj_portfolio_2024');
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
 
         // ===== STATE =====
         let isAdmin = false;
@@ -299,11 +312,12 @@
         adminBtn.addEventListener('click', showModal);
         logoutBtn.addEventListener('click', logoutAdmin);
 
-        loginForm.addEventListener('submit', (e) => {
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const password = document.getElementById('password').value;
+            const hashedInput = await hashPassword(password);
 
-            if (password === ADMIN_PASSWORD) {
+            if (hashedInput === ADMIN_PASSWORD_HASH) {
                 loginAdmin();
             } else {
                 loginError.classList.remove('hidden');
