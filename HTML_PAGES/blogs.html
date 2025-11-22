@@ -7,6 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="../css/blogs.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <header class="header">
@@ -102,7 +103,12 @@
     </div>
 
     <script>
-        // ===== CONFIGURATION =====
+        // ===== SUPABASE CONFIGURATION =====
+        const SUPABASE_URL = 'https://xtaiqcqjefsaibmrgrxc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0YWlxY3FqZWZzYWlibXJncnhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3NjQ1MTEsImV4cCI6MjA3OTM0MDUxMX0.GYB_49KtRNiACJJvQf44Dvw-xeny_k6Uuctx_TTNZBU';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ===== ADMIN CONFIGURATION =====
         // Password is securely hashed - no one can see the actual password
         // To change password: open console, run: hashPassword('yournewpassword').then(console.log)
         // Then replace the hash below
@@ -119,6 +125,7 @@
 
         // ===== STATE =====
         let isAdmin = false;
+        let blogsCache = []; // Cache blogs locally for quick access
 
         // ===== DOM ELEMENTS =====
         const adminBtn = document.getElementById('adminBtn');
@@ -133,39 +140,61 @@
         const postModal = document.getElementById('postModal');
         const postModalBody = document.getElementById('postModalBody');
 
-        // ===== BLOG STORAGE =====
-        function getBlogs() {
-            const blogs = localStorage.getItem('sjBlogs');
-            return blogs ? JSON.parse(blogs) : [];
+        // ===== BLOG STORAGE (SUPABASE) =====
+        async function getBlogs() {
+            const { data, error } = await supabase
+                .from('posts')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error fetching blogs:', error);
+                return [];
+            }
+
+            // Map Supabase fields to our format
+            blogsCache = data.map(post => ({
+                id: post.id,
+                title: post.title,
+                content: post.content,
+                category: post.category,
+                date: post.created_at
+            }));
+
+            return blogsCache;
         }
 
-        function saveBlogs(blogs) {
-            localStorage.setItem('sjBlogs', JSON.stringify(blogs));
+        async function addBlog(title, content, category) {
+            const { data, error } = await supabase
+                .from('posts')
+                .insert([{ title, content, category }])
+                .select();
+
+            if (error) {
+                console.error('Error adding blog:', error);
+                return null;
+            }
+
+            return data[0];
         }
 
-        function addBlog(title, content, category) {
-            const blogs = getBlogs();
-            const newBlog = {
-                id: Date.now(),
-                title,
-                content,
-                category,
-                date: new Date().toISOString()
-            };
-            blogs.unshift(newBlog);
-            saveBlogs(blogs);
-            return newBlog;
-        }
+        async function deleteBlog(id) {
+            const { error } = await supabase
+                .from('posts')
+                .delete()
+                .eq('id', id);
 
-        function deleteBlog(id) {
-            const blogs = getBlogs().filter(blog => blog.id !== id);
-            saveBlogs(blogs);
-            renderBlogs();
+            if (error) {
+                console.error('Error deleting blog:', error);
+                return;
+            }
+
+            await renderBlogs();
         }
 
         // ===== RENDER FUNCTIONS =====
-        function renderBlogs() {
-            const blogs = getBlogs();
+        async function renderBlogs() {
+            const blogs = await getBlogs();
             blogGrid.innerHTML = '';
 
             if (blogs.length === 0) {
@@ -231,8 +260,7 @@
 
         // ===== POST MODAL FUNCTIONS =====
         function openPost(id) {
-            const blogs = getBlogs();
-            const blog = blogs.find(b => b.id === id);
+            const blog = blogsCache.find(b => b.id === id);
             if (!blog) return;
 
             const formattedDate = formatDate(blog.date);
@@ -268,9 +296,9 @@
             document.body.style.overflow = '';
         }
 
-        function deletePostAndClose(id) {
+        async function deletePostAndClose(id) {
             if (confirm(localStorage.getItem('siteLang') === 'en' ? 'Delete this post?' : 'Supprimer cet article ?')) {
-                deleteBlog(id);
+                await deleteBlog(id);
                 closePostModal();
             }
         }
@@ -293,19 +321,19 @@
             document.getElementById('password').value = '';
         }
 
-        function loginAdmin() {
+        async function loginAdmin() {
             isAdmin = true;
             adminPanel.classList.remove('hidden');
             adminBtn.classList.add('hidden');
             closeModal();
-            renderBlogs();
+            await renderBlogs();
         }
 
-        function logoutAdmin() {
+        async function logoutAdmin() {
             isAdmin = false;
             adminPanel.classList.add('hidden');
             adminBtn.classList.remove('hidden');
-            renderBlogs();
+            await renderBlogs();
         }
 
         // ===== EVENT LISTENERS =====
@@ -318,22 +346,22 @@
             const hashedInput = await hashPassword(password);
 
             if (hashedInput === ADMIN_PASSWORD_HASH) {
-                loginAdmin();
+                await loginAdmin();
             } else {
                 loginError.classList.remove('hidden');
                 document.getElementById('password').value = '';
             }
         });
 
-        blogForm.addEventListener('submit', (e) => {
+        blogForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const title = document.getElementById('postTitle').value;
             const content = document.getElementById('postContent').value;
             const category = document.getElementById('postCategory').value;
 
-            addBlog(title, content, category);
+            await addBlog(title, content, category);
             blogForm.reset();
-            renderBlogs();
+            await renderBlogs();
         });
 
         // Close modal on outside click
@@ -381,10 +409,10 @@
         }
 
         // ===== INITIALIZATION =====
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const savedLang = localStorage.getItem('siteLang') || 'fr';
             applyLang(savedLang);
-            renderBlogs();
+            await renderBlogs();
         });
     </script>
 </body>

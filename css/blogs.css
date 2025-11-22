@@ -534,7 +534,7 @@
     }
 
     .blog-page {
-        padding: 6rem 1rem 2rem;
+        padding: 9rem 1rem 2rem;
     }
 
     .blog-header {
@@ -680,7 +680,7 @@
 
 @media screen and (max-width: 380px) {
     .blog-page {
-        padding: 6.5rem 0.75rem 1.5rem;
+        padding: 9.5rem 0.75rem 1.5rem;
     }
 
     .blog-header h1 {
