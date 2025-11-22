@@ -93,10 +93,14 @@
             <h2 data-fr="Connexion Admin" data-en="Admin Login">Connexion Admin</h2>
             <form id="loginForm">
                 <div class="form-group">
+                    <label for="email" data-fr="Email" data-en="Email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
                     <label for="password" data-fr="Mot de passe" data-en="Password">Mot de passe</label>
                     <input type="password" id="password" required>
                 </div>
-                <p id="loginError" class="error-msg hidden" data-fr="Mot de passe incorrect" data-en="Incorrect password">Mot de passe incorrect</p>
+                <p id="loginError" class="error-msg hidden" data-fr="Email ou mot de passe incorrect" data-en="Incorrect email or password">Email ou mot de passe incorrect</p>
                 <button type="submit" class="submit-btn" data-fr="Connexion" data-en="Login">Connexion</button>
             </form>
         </div>
@@ -108,7 +112,6 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0YWlxY3FqZWZzYWlibXJncnhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3NjQ1MTEsImV4cCI6MjA3OTM0MDUxMX0.GYB_49KtRNiACJJvQf44Dvw-xeny_k6Uuctx_TTNZBU';
 
         console.log('Initializing Supabase...');
-        console.log('Supabase library loaded:', typeof window.supabase);
 
         let supabase;
         try {
@@ -118,23 +121,9 @@
             console.error('Failed to create Supabase client:', e);
         }
 
-        // ===== ADMIN CONFIGURATION =====
-        // Password is securely hashed - no one can see the actual password
-        // To change password: open console, run: hashPassword('yournewpassword').then(console.log)
-        // Then replace the hash below
-        const ADMIN_PASSWORD_HASH = 'ac743779863ca13dc036df48159ac0a2af78a64a4664ce7c548c6cfb9448c159';
-
-        // ===== HASHING FUNCTION =====
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password + 'sj_portfolio_2024');
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
         // ===== STATE =====
         let isAdmin = false;
+        let currentUser = null;
         let blogsCache = []; // Cache blogs locally for quick access
 
         // ===== DOM ELEMENTS =====
@@ -326,17 +315,19 @@
         // ===== ADMIN FUNCTIONS =====
         function showModal() {
             loginModal.classList.remove('hidden');
-            document.getElementById('password').focus();
+            document.getElementById('email').focus();
         }
 
         function closeModal() {
             loginModal.classList.add('hidden');
             loginError.classList.add('hidden');
+            document.getElementById('email').value = '';
             document.getElementById('password').value = '';
         }
 
-        async function loginAdmin() {
+        async function loginAdmin(user) {
             isAdmin = true;
+            currentUser = user;
             adminPanel.classList.remove('hidden');
             adminBtn.classList.add('hidden');
             closeModal();
@@ -344,10 +335,24 @@
         }
 
         async function logoutAdmin() {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                console.error('Logout error:', error);
+                return;
+            }
             isAdmin = false;
+            currentUser = null;
             adminPanel.classList.add('hidden');
             adminBtn.classList.remove('hidden');
             await renderBlogs();
+        }
+
+        // Check if user is already logged in
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                await loginAdmin(session.user);
+            }
         }
 
         // ===== EVENT LISTENERS =====
@@ -356,14 +361,20 @@
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const hashedInput = await hashPassword(password);
 
-            if (hashedInput === ADMIN_PASSWORD_HASH) {
-                await loginAdmin();
-            } else {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            if (error) {
+                console.error('Login error:', error);
                 loginError.classList.remove('hidden');
                 document.getElementById('password').value = '';
+            } else {
+                await loginAdmin(data.user);
             }
         });
 
@@ -432,6 +443,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const savedLang = localStorage.getItem('siteLang') || 'fr';
             applyLang(savedLang);
+            await checkAuth(); // Check if already logged in
             await renderBlogs();
         });
     </script>
