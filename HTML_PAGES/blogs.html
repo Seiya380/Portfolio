@@ -106,7 +106,17 @@
         // ===== SUPABASE CONFIGURATION =====
         const SUPABASE_URL = 'https://xtaiqcqjefsaibmrgrxc.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0YWlxY3FqZWZzYWlibXJncnhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3NjQ1MTEsImV4cCI6MjA3OTM0MDUxMX0.GYB_49KtRNiACJJvQf44Dvw-xeny_k6Uuctx_TTNZBU';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        console.log('Initializing Supabase...');
+        console.log('Supabase library loaded:', typeof window.supabase);
+
+        let supabase;
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log('Supabase client created successfully');
+        } catch (e) {
+            console.error('Failed to create Supabase client:', e);
+        }
 
         // ===== ADMIN CONFIGURATION =====
         // Password is securely hashed - no one can see the actual password
@@ -165,6 +175,8 @@
         }
 
         async function addBlog(title, content, category) {
+            console.log('Adding blog to Supabase:', { title, content, category });
+
             const { data, error } = await supabase
                 .from('posts')
                 .insert([{ title, content, category }])
@@ -172,9 +184,11 @@
 
             if (error) {
                 console.error('Error adding blog:', error);
+                alert('Error saving post: ' + error.message);
                 return null;
             }
 
+            console.log('Blog added successfully:', data);
             return data[0];
         }
 
@@ -355,11 +369,17 @@
 
         blogForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            console.log('Form submitted!');
+
             const title = document.getElementById('postTitle').value;
             const content = document.getElementById('postContent').value;
             const category = document.getElementById('postCategory').value;
 
-            await addBlog(title, content, category);
+            console.log('Post data:', { title, content, category });
+
+            const result = await addBlog(title, content, category);
+            console.log('Add result:', result);
+
             blogForm.reset();
             await renderBlogs();
         });
