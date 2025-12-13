@@ -7,6 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="../css/services.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <header class="header">
@@ -171,7 +172,49 @@
         </div>
     </div>
 
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 data-fr="Connexion Admin" data-en="Admin Login">Connexion Admin</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email" data-fr="Email" data-en="Email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" data-fr="Mot de passe" data-en="Password">Mot de passe</label>
+                    <input type="password" id="password" required>
+                </div>
+                <p id="loginError" class="error-msg hidden" data-fr="Email ou mot de passe incorrect" data-en="Incorrect email or password">Email ou mot de passe incorrect</p>
+                <button type="submit" class="submit-btn" data-fr="Connexion" data-en="Login">Connexion</button>
+            </form>
+        </div>
+    </div>
+
     <script>
+        // ===== SUPABASE CONFIGURATION =====
+        const SUPABASE_URL = 'https://xtaiqcqjefsaibmrgrxc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0YWlxY3FqZWZzYWlibXJncnhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3NjQ1MTEsImV4cCI6MjA3OTM0MDUxMX0.GYB_49KtRNiACJJvQf44Dvw-xeny_k6Uuctx_TTNZBU';
+
+        let supabase;
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log('Supabase client created successfully');
+        } catch (e) {
+            console.error('Failed to create Supabase client:', e);
+        }
+
+        // ===== STATE =====
+        let isAdmin = false;
+        let currentUser = null;
+
+        // ===== DOM ELEMENTS =====
+        const loginModal = document.getElementById('loginModal');
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
+
+        // ===== LANGUAGE FUNCTIONS =====
         function switchLang(lang) {
             localStorage.setItem('siteLang', lang);
             applyLang(lang);
@@ -190,11 +233,320 @@
             document.documentElement.lang = lang;
         }
 
-        // Apply saved language on page load
-        document.addEventListener('DOMContentLoaded', () => {
+        // ===== ADMIN AUTHENTICATION =====
+        function showModal() {
+            loginModal.classList.remove('hidden');
+            document.getElementById('email').focus();
+        }
+
+        function closeModal() {
+            loginModal.classList.add('hidden');
+            loginError.classList.add('hidden');
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        async function loginAdmin(user) {
+            isAdmin = true;
+            currentUser = user;
+            closeModal();
+            // After login, show the demand status dialog
+            toggleDemandStatus();
+        }
+
+        async function logoutAdmin() {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                console.error('Logout error:', error);
+                return;
+            }
+            isAdmin = false;
+            currentUser = null;
+        }
+
+        // Check if user is already logged in
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                isAdmin = true;
+                currentUser = session.user;
+            }
+        }
+
+        // ===== EVENT LISTENERS =====
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            if (error) {
+                console.error('Login error:', error);
+                loginError.classList.remove('hidden');
+                document.getElementById('password').value = '';
+            } else {
+                await loginAdmin(data.user);
+            }
+        });
+
+        // Close modal on outside click
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                closeModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (!loginModal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            }
+        });
+
+        // ===== ADMIN DEMAND STATUS TOGGLE =====
+        function toggleDemandStatus() {
+            // Check if user is authenticated
+            if (!isAdmin) {
+                showModal();
+                return;
+            }
+
+            const statusDiv = document.getElementById('demand-status-display');
+            
+            if (statusDiv) {
+                // Remove the status
+                statusDiv.remove();
+                localStorage.removeItem('demandStatus');
+            } else {
+                // Ask admin for current status
+                const lang = localStorage.getItem('siteLang') || 'fr';
+                const message = lang === 'fr' 
+                    ? 'Êtes-vous actuellement surdemandé?\n\nOK = Oui (surdemandé)\nAnnuler = Non (disponible)'
+                    : 'Are you currently overbooked?\n\nOK = Yes (overbooked)\nCancel = No (available)';
+                const isHighDemand = confirm(message);
+                showDemandStatus(isHighDemand, true);
+            }
+        }
+
+        function showDemandStatus(isHighDemand, save) {
+            // Remove existing status if any
+            const existing = document.getElementById('demand-status-display');
+            if (existing) existing.remove();
+
+            // Create status display
+            const statusDiv = document.createElement('div');
+            statusDiv.id = 'demand-status-display';
+            statusDiv.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: ${isHighDemand ? 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)' : 'linear-gradient(135deg, #51cf66 0%, #37b24d 100%)'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 12px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+                backdrop-filter: blur(10px);
+                z-index: 1000;
+                font-family: 'Poppins', sans-serif;
+                font-weight: 500;
+                font-size: 14px;
+                animation: slideIn 0.3s ease-out;
+                border: 1px solid rgba(255,255,255,0.2);
+            `;
+
+            const lang = localStorage.getItem('siteLang') || 'fr';
+            const messages = {
+                fr: {
+                    high: '⚠️ Actuellement surdemandé - Délais prolongés',
+                    low: '✅ Disponible pour nouveaux projets'
+                },
+                en: {
+                    high: '⚠️ Currently overbooked - Extended delays',
+                    low: '✅ Available for new projects'
+                }
+            };
+
+            statusDiv.textContent = isHighDemand ? messages[lang].high : messages[lang].low;
+            statusDiv.setAttribute('data-fr-text', isHighDemand ? messages.fr.high : messages.fr.low);
+            statusDiv.setAttribute('data-en-text', isHighDemand ? messages.en.high : messages.en.low);
+
+            document.body.appendChild(statusDiv);
+
+            if (save) {
+                localStorage.setItem('demandStatus', isHighDemand ? 'high' : 'low');
+            }
+        }
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', async () => {
             const savedLang = localStorage.getItem('siteLang') || 'fr';
             applyLang(savedLang);
+            
+            // Check authentication status
+            await checkAuth();
+            
+            // Check if demand status should be displayed
+            const demandStatus = localStorage.getItem('demandStatus');
+            if (demandStatus) {
+                showDemandStatus(demandStatus === 'high', false);
+            }
         });
+
+        // ===== ADD CSS STYLES =====
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            .admin-btn {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                cursor: pointer;
+                box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                z-index: 999;
+            }
+            .admin-btn:hover {
+                transform: scale(1.1);
+                box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+            }
+            .admin-btn:active {
+                transform: scale(0.95);
+            }
+            .modal {
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(4px);
+                z-index: 10000;
+                align-items: center;
+                justify-content: center;
+            }
+            .modal.hidden {
+                display: none;
+            }
+            .modal-content {
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 250, 0.95) 100%);
+                padding: 40px;
+                border-radius: 20px;
+                max-width: 400px;
+                width: 90%;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                position: relative;
+            }
+            .modal-close {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                background: none;
+                border: none;
+                font-size: 30px;
+                cursor: pointer;
+                color: #666;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: all 0.3s ease;
+            }
+            .modal-close:hover {
+                background: rgba(0, 0, 0, 0.1);
+                color: #000;
+            }
+            .modal h2 {
+                margin: 0 0 25px 0;
+                color: #333;
+                font-size: 24px;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #555;
+                font-weight: 500;
+            }
+            .form-group input {
+                width: 100%;
+                padding: 12px 15px;
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                font-size: 14px;
+                transition: all 0.3s ease;
+                box-sizing: border-box;
+            }
+            .form-group input:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+            .submit-btn {
+                width: 100%;
+                padding: 14px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                border-radius: 10px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .submit-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            }
+            .error-msg {
+                color: #e53e3e;
+                font-size: 14px;
+                margin: 10px 0;
+                padding: 10px;
+                background: rgba(229, 62, 62, 0.1);
+                border-radius: 8px;
+                border-left: 3px solid #e53e3e;
+            }
+            .error-msg.hidden {
+                display: none;
+            }
+        `;
+        document.head.appendChild(style);
     </script>
+
+    <!-- Admin Button -->
+    <button class="admin-btn" onclick="toggleDemandStatus()" title="Admin: Gérer le statut de demande">
+        🔒
+    </button>
+
 </body>
 </html>
