@@ -243,12 +243,15 @@
             card.onclick = () => openPost(blog.id);
 
             const formattedDate = formatDate(blog.date);
+            const safeCategory = escapeHtml(blog.category);
+            const labelFr = escapeHtml(categoryLabels[blog.category]?.fr || blog.category);
+            const labelEn = escapeHtml(categoryLabels[blog.category]?.en || blog.category);
 
             card.innerHTML = `
-                <div class="card-category" data-category="${blog.category}">
-                    <span data-fr="${categoryLabels[blog.category]?.fr || blog.category}"
-                          data-en="${categoryLabels[blog.category]?.en || blog.category}">
-                        ${categoryLabels[blog.category]?.fr || blog.category}
+                <div class="card-category" data-category="${safeCategory}">
+                    <span data-fr="${labelFr}"
+                          data-en="${labelEn}">
+                        ${labelFr}
                     </span>
                 </div>
                 <h3 class="card-title">${escapeHtml(blog.title)}</h3>
@@ -270,12 +273,17 @@
             const formattedDate = formatDate(blog.date);
             const savedLang = localStorage.getItem('siteLang') || 'fr';
 
+            const safeCategory = escapeHtml(blog.category);
+            const labelFr = escapeHtml(categoryLabels[blog.category]?.fr || blog.category);
+            const labelEn = escapeHtml(categoryLabels[blog.category]?.en || blog.category);
+            const labelCurrent = escapeHtml(categoryLabels[blog.category]?.[savedLang] || blog.category);
+
             postModalBody.innerHTML = `
                 <div class="post-detail">
-                    <div class="card-category" data-category="${blog.category}">
-                        <span data-fr="${categoryLabels[blog.category]?.fr || blog.category}"
-                              data-en="${categoryLabels[blog.category]?.en || blog.category}">
-                            ${categoryLabels[blog.category]?.[savedLang] || blog.category}
+                    <div class="card-category" data-category="${safeCategory}">
+                        <span data-fr="${labelFr}"
+                              data-en="${labelEn}">
+                            ${labelCurrent}
                         </span>
                     </div>
                     <h2 class="post-title">${escapeHtml(blog.title)}</h2>
@@ -308,9 +316,12 @@
         }
 
         function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
         }
 
         // ===== ADMIN FUNCTIONS =====
