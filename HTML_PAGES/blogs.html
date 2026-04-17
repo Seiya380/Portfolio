@@ -1,463 +1,386 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Suarez Joris</title>
-    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="../css/blogs.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Joris Suarez</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../css/blogs.css">
 </head>
 <body>
-    <header class="header">
-        <a href="../index.html" class="logo-container">
-            <div class="logo-glass">
-                <span class="logo-text">SJ</span>
-            </div>
-        </a>
-        <nav class="nav">
-            <a href="about.html" data-fr="A propos" data-en="About">A propos</a>
-            <a href="services.html" data-fr="Services" data-en="Services">Services</a>
-            <a href="works.html" data-fr="Travaux" data-en="Works">Travaux</a>
-            <a href="blogs.html" data-fr="Blog" data-en="Blogs">Blog</a>
-            <a href="contact.html" data-fr="Contact" data-en="Contact">Contact</a>
-        </nav>
-        <div class="header-actions">
-            <div class="lang-switcher">
-                <button onclick="switchLang('fr')" class="active">FR</button>
-                <button onclick="switchLang('en')">EN</button>
-            </div>
-            <button id="adminBtn" class="admin-btn" data-fr="Admin" data-en="Admin">Admin</button>
-        </div>
-    </header>
 
-    <main class="blog-page">
-        <section class="blog-header">
-            <h1 data-fr="Mon Blog" data-en="My Blog">Mon Blog</h1>
-            <p class="blog-subtitle" data-fr="Pensees, tutoriels et actualites" data-en="Thoughts, tutorials and news">Pensees, tutoriels et actualites</p>
-        </section>
+<main class="blog-page">
 
-        <!-- Admin Panel (hidden by default) -->
-        <section id="adminPanel" class="admin-panel hidden">
-            <div class="admin-header">
-                <h2 data-fr="Creer un article" data-en="Create a post">Creer un article</h2>
-                <button id="logoutBtn" class="logout-btn" data-fr="Deconnexion" data-en="Logout">Deconnexion</button>
-            </div>
-            <form id="blogForm" class="blog-form">
-                <div class="form-group">
-                    <label for="postTitle" data-fr="Titre" data-en="Title">Titre</label>
-                    <input type="text" id="postTitle" required>
-                </div>
-                <div class="form-group">
-                    <label for="postContent" data-fr="Contenu" data-en="Content">Contenu</label>
-                    <textarea id="postContent" rows="6" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="postCategory" data-fr="Categorie" data-en="Category">Categorie</label>
-                    <select id="postCategory">
-                        <option value="tech" data-fr="Technologie" data-en="Technology">Technologie</option>
-                        <option value="design" data-fr="Design" data-en="Design">Design</option>
-                        <option value="tutorial" data-fr="Tutoriel" data-en="Tutorial">Tutoriel</option>
-                        <option value="news" data-fr="Actualites" data-en="News">Actualites</option>
-                    </select>
-                </div>
-                <button type="submit" class="submit-btn" data-fr="Publier" data-en="Publish">Publier</button>
-            </form>
-        </section>
+  <section class="blog-hero reveal" style="--delay:0s">
+    <span class="label" data-fr="Écrits & réflexions" data-en="Writing & thoughts">Écrits & réflexions</span>
+    <h1 class="blog-headline" data-fr="Le Blog." data-en="The Blog.">Le Blog.</h1>
+    <p class="blog-sub" data-fr="Pensées, tutoriels et observations sur le design et le code." data-en="Thoughts, tutorials and observations on design and code.">Pensées, tutoriels et observations sur le design et le code.</p>
+  </section>
 
-        <!-- Blog Posts Grid -->
-        <section class="blog-grid" id="blogGrid">
-            <!-- Posts will be dynamically inserted here -->
-        </section>
-
-        <div id="emptyState" class="empty-state hidden">
-            <p data-fr="Aucun article pour le moment" data-en="No posts yet">Aucun article pour le moment</p>
-        </div>
-    </main>
-
-    <!-- Post Detail Modal -->
-    <div id="postModal" class="modal hidden">
-        <div class="modal-content post-modal-content">
-            <button class="modal-close" onclick="closePostModal()">&times;</button>
-            <div id="postModalBody">
-                <!-- Post content will be inserted here -->
-            </div>
-        </div>
+  <!-- Admin Panel (hidden by default) -->
+  <section id="adminPanel" class="admin-panel hidden">
+    <div class="admin-panel-header">
+      <span class="label" data-fr="Nouvel article" data-en="New post">Nouvel article</span>
+      <button id="logoutBtn" class="btn-danger" data-fr="Déconnexion" data-en="Logout">Déconnexion</button>
     </div>
+    <form id="blogForm" class="blog-form">
+      <div class="form-group">
+        <label for="postTitle" data-fr="Titre" data-en="Title">Titre</label>
+        <input type="text" id="postTitle" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="postContent" data-fr="Contenu" data-en="Content">Contenu</label>
+        <textarea id="postContent" rows="5" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="postCategory" data-fr="Catégorie" data-en="Category">Catégorie</label>
+        <select id="postCategory">
+          <option value="tech" data-fr="Technologie" data-en="Technology">Technologie</option>
+          <option value="design">Design</option>
+          <option value="tutorial" data-fr="Tutoriel" data-en="Tutorial">Tutoriel</option>
+          <option value="news" data-fr="Actualités" data-en="News">Actualités</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary" data-fr="Publier" data-en="Publish">Publier</button>
+    </form>
+  </section>
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal hidden">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <h2 data-fr="Connexion Admin" data-en="Admin Login">Connexion Admin</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="email" data-fr="Email" data-en="Email">Email</label>
-                    <input type="email" id="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password" data-fr="Mot de passe" data-en="Password">Mot de passe</label>
-                    <input type="password" id="password" required>
-                </div>
-                <p id="loginError" class="error-msg hidden" data-fr="Email ou mot de passe incorrect" data-en="Incorrect email or password">Email ou mot de passe incorrect</p>
-                <button type="submit" class="submit-btn" data-fr="Connexion" data-en="Login">Connexion</button>
-            </form>
-        </div>
-    </div>
+  <!-- Blog grid -->
+  <div id="blogGrid" class="blog-grid reveal" style="--delay:0.15s"></div>
 
-    <script type="module">
-        // ===== SUPABASE CONFIGURATION =====
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-        
-        const SUPABASE_URL = 'https://xtaiqcqjefsaibmrgrxc.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0YWlxY3FqZWZzYWlibXJncnhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3NjQ1MTEsImV4cCI6MjA3OTM0MDUxMX0.GYB_49KtRNiACJJvQf44Dvw-xeny_k6Uuctx_TTNZBU';
+  <div id="emptyState" class="blog-empty hidden">
+    <p data-fr="Aucun article pour le moment." data-en="No posts yet.">Aucun article pour le moment.</p>
+  </div>
 
-        console.log('Initializing Supabase...');
+</main>
 
-        let supabase;
-        try {
-            supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            console.log('Supabase client created successfully');
-        } catch (e) {
-            console.error('Failed to create Supabase client:', e);
-        }
+<!-- Post Modal -->
+<div id="postModal" class="modal hidden">
+  <div class="modal-box post-modal-box">
+    <button class="modal-close" id="postModalClose" aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div id="postModalBody"></div>
+  </div>
+</div>
 
-        // ===== STATE =====
-        let isAdmin = false;
-        let currentUser = null;
-        let blogsCache = []; // Cache blogs locally for quick access
+<!-- Login Modal -->
+<div id="loginModal" class="modal hidden">
+  <div class="modal-box">
+    <button class="modal-close" id="loginModalClose" aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <h2 class="modal-heading" data-fr="Connexion Admin" data-en="Admin Login">Connexion Admin</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email" data-fr="Email" data-en="Email">Email</label>
+        <input type="email" id="email" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="password" data-fr="Mot de passe" data-en="Password">Mot de passe</label>
+        <input type="password" id="password" required autocomplete="current-password">
+      </div>
+      <p id="loginError" class="error-msg hidden" data-fr="Email ou mot de passe incorrect" data-en="Incorrect email or password">Email ou mot de passe incorrect</p>
+      <button type="submit" class="btn-primary" style="width:100%" data-fr="Connexion" data-en="Login">Connexion</button>
+    </form>
+  </div>
+</div>
 
-        // ===== DOM ELEMENTS =====
-        const adminBtn = document.getElementById('adminBtn');
-        const adminPanel = document.getElementById('adminPanel');
-        const loginModal = document.getElementById('loginModal');
-        const loginForm = document.getElementById('loginForm');
-        const loginError = document.getElementById('loginError');
-        const blogForm = document.getElementById('blogForm');
-        const blogGrid = document.getElementById('blogGrid');
-        const emptyState = document.getElementById('emptyState');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const postModal = document.getElementById('postModal');
-        const postModalBody = document.getElementById('postModalBody');
+<!-- Subtle admin trigger (hidden until hovered) -->
+<button id="adminBtn" class="admin-fab" aria-label="Admin">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+</button>
 
-        // ===== BLOG STORAGE (SUPABASE) =====
-        async function getBlogs() {
-            const { data, error } = await supabase
-                .from('posts')
-                .select('*')
-                .order('created_at', { ascending: false });
+<nav class="dock" aria-label="Navigation">
+  <a href="../index.html" class="dock-item" aria-label="Accueil">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1v-9.5z"/><path d="M9 21V12h6v9"/></svg>
+    <span class="dock-tooltip" data-fr="Accueil" data-en="Home">Accueil</span>
+  </a>
+  <a href="works.html" class="dock-item" aria-label="Travaux">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    <span class="dock-tooltip" data-fr="Travaux" data-en="Works">Travaux</span>
+  </a>
+  <a href="blogs.html" class="dock-item active" aria-label="Blog">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 6h16M4 10h16M4 14h10M4 18h7"/></svg>
+    <span class="dock-tooltip">Blog</span>
+  </a>
+  <a href="about.html" class="dock-item" aria-label="À propos">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7"/></svg>
+    <span class="dock-tooltip" data-fr="À propos" data-en="About">À propos</span>
+  </a>
+  <a href="services.html" class="dock-item" aria-label="Lab">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 3h6v8l3.5 9H5.5L9 11V3z"/><path d="M6.5 18.5h11"/></svg>
+    <span class="dock-tooltip">Lab</span>
+  </a>
+  <a href="contact.html" class="dock-item" aria-label="Contact">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+    <span class="dock-tooltip">Contact</span>
+  </a>
+  <div class="dock-sep" aria-hidden="true"></div>
+  <button class="dock-item" id="lang-btn" aria-label="Changer de langue">
+    <span class="dock-lang" id="lang-display">FR</span>
+    <span class="dock-tooltip" id="lang-tip">Switch to English</span>
+  </button>
+</nav>
 
-            if (error) {
-                console.error('Error fetching blogs:', error);
-                return [];
-            }
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-            // Map Supabase fields to our format
-            blogsCache = data.map(post => ({
-                id: post.id,
-                title: post.title,
-                content: post.content,
-                category: post.category,
-                date: post.created_at
-            }));
+  const SUPABASE_URL = 'https://xtaiqcqjefsaibmrgrxc.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0YWlxY3FqZWZzYWlibXJncnhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3NjQ1MTEsImV4cCI6MjA3OTM0MDUxMX0.GYB_49KtRNiACJJvQf44Dvw-xeny_k6Uuctx_TTNZBU';
 
-            return blogsCache;
-        }
+  let supabase;
+  try {
+    supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } catch (e) {
+    console.error('Failed to create Supabase client:', e);
+  }
 
-        async function addBlog(title, content, category) {
-            console.log('Adding blog to Supabase:', { title, content, category });
+  let isAdmin = false;
+  let currentUser = null;
+  let blogsCache = [];
 
-            const { data, error } = await supabase
-                .from('posts')
-                .insert([{ title, content, category }])
-                .select();
+  const adminBtn    = document.getElementById('adminBtn');
+  const adminPanel  = document.getElementById('adminPanel');
+  const loginModal  = document.getElementById('loginModal');
+  const loginForm   = document.getElementById('loginForm');
+  const loginError  = document.getElementById('loginError');
+  const blogForm    = document.getElementById('blogForm');
+  const blogGrid    = document.getElementById('blogGrid');
+  const emptyState  = document.getElementById('emptyState');
+  const logoutBtn   = document.getElementById('logoutBtn');
+  const postModal   = document.getElementById('postModal');
+  const postModalBody = document.getElementById('postModalBody');
 
-            if (error) {
-                console.error('Error adding blog:', error);
-                alert('Error saving post: ' + error.message);
-                return null;
-            }
+  // ===== SUPABASE CRUD =====
+  async function getBlogs() {
+    const { data, error } = await supabase.from('posts').select('*').order('created_at', { ascending: false });
+    if (error) { console.error('Error fetching blogs:', error); return []; }
+    blogsCache = data.map(p => ({ id: p.id, title: p.title, content: p.content, category: p.category, date: p.created_at }));
+    return blogsCache;
+  }
 
-            console.log('Blog added successfully:', data);
-            return data[0];
-        }
+  async function addBlog(title, content, category) {
+    const { data, error } = await supabase.from('posts').insert([{ title, content, category }]).select();
+    if (error) { console.error('Error adding blog:', error); alert('Error saving post: ' + error.message); return null; }
+    return data[0];
+  }
 
-        async function deleteBlog(id) {
-            const { error } = await supabase
-                .from('posts')
-                .delete()
-                .eq('id', id);
+  async function deleteBlog(id) {
+    const { error } = await supabase.from('posts').delete().eq('id', id);
+    if (error) { console.error('Error deleting blog:', error); return; }
+    await renderBlogs();
+  }
 
-            if (error) {
-                console.error('Error deleting blog:', error);
-                return;
-            }
+  // ===== RENDER =====
+  async function renderBlogs() {
+    const blogs = await getBlogs();
+    blogGrid.innerHTML = '';
+    if (blogs.length === 0) {
+      emptyState.classList.remove('hidden');
+      blogGrid.classList.add('hidden');
+      return;
+    }
+    emptyState.classList.add('hidden');
+    blogGrid.classList.remove('hidden');
+    blogs.forEach(blog => blogGrid.appendChild(createBlogCard(blog)));
+    applyLang(localStorage.getItem('siteLang') || 'fr');
+  }
 
-            await renderBlogs();
-        }
+  const categoryLabels = {
+    tech:     { fr: 'Technologie', en: 'Technology' },
+    design:   { fr: 'Design',      en: 'Design'     },
+    tutorial: { fr: 'Tutoriel',    en: 'Tutorial'   },
+    news:     { fr: 'Actualités',  en: 'News'       }
+  };
 
-        // ===== RENDER FUNCTIONS =====
-        async function renderBlogs() {
-            const blogs = await getBlogs();
-            blogGrid.innerHTML = '';
+  function formatDate(dateStr) {
+    return new Date(dateStr).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
 
-            if (blogs.length === 0) {
-                emptyState.classList.remove('hidden');
-                blogGrid.classList.add('hidden');
-                return;
-            }
+  function escapeHtml(text) {
+    return String(text)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
 
-            emptyState.classList.add('hidden');
-            blogGrid.classList.remove('hidden');
+  function createBlogCard(blog) {
+    const card = document.createElement('article');
+    card.className = 'blog-card card';
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => openPost(blog.id));
 
-            blogs.forEach(blog => {
-                const card = createBlogCard(blog);
-                blogGrid.appendChild(card);
-            });
+    const labelFr = escapeHtml(categoryLabels[blog.category]?.fr || blog.category);
+    const labelEn = escapeHtml(categoryLabels[blog.category]?.en || blog.category);
 
-            // Reapply language
-            const savedLang = localStorage.getItem('siteLang') || 'fr';
-            applyLang(savedLang);
-        }
+    card.innerHTML = `
+      <div class="blog-card-cat">
+        <span class="tag" data-fr="${labelFr}" data-en="${labelEn}">${labelFr}</span>
+      </div>
+      <h3 class="blog-card-title">${escapeHtml(blog.title)}</h3>
+      <p class="blog-card-excerpt">${escapeHtml(blog.content)}</p>
+      <div class="blog-card-footer">
+        <span class="blog-card-date">${formatDate(blog.date)}</span>
+        <span class="blog-read-more" data-fr="Lire →" data-en="Read →">Lire →</span>
+      </div>
+    `;
+    return card;
+  }
 
-        const categoryLabels = {
-            tech: { fr: 'Technologie', en: 'Technology' },
-            design: { fr: 'Design', en: 'Design' },
-            tutorial: { fr: 'Tutoriel', en: 'Tutorial' },
-            news: { fr: 'Actualites', en: 'News' }
-        };
+  // ===== MODAL =====
+  function openPost(id) {
+    const blog = blogsCache.find(b => b.id === id);
+    if (!blog) return;
 
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('fr-FR', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-            });
-        }
+    const savedLang = localStorage.getItem('siteLang') || 'fr';
+    const labelFr = escapeHtml(categoryLabels[blog.category]?.fr || blog.category);
+    const labelEn = escapeHtml(categoryLabels[blog.category]?.en || blog.category);
+    const labelCurrent = escapeHtml(categoryLabels[blog.category]?.[savedLang] || blog.category);
 
-        function createBlogCard(blog) {
-            const card = document.createElement('article');
-            card.className = 'blog-card';
-            card.style.cursor = 'pointer';
-            card.onclick = () => openPost(blog.id);
+    postModalBody.innerHTML = `
+      <div class="post-detail">
+        <span class="tag" data-fr="${labelFr}" data-en="${labelEn}">${labelCurrent}</span>
+        <h2 class="post-title">${escapeHtml(blog.title)}</h2>
+        <time class="post-date">${formatDate(blog.date)}</time>
+        <div class="post-body">${escapeHtml(blog.content).replace(/\n/g, '<br>')}</div>
+        ${isAdmin ? `<button class="btn-danger delete-post-btn" data-fr="${savedLang === 'fr' ? 'Supprimer' : 'Delete'}" data-en="Delete">${savedLang === 'fr' ? 'Supprimer' : 'Delete'}</button>` : ''}
+      </div>
+    `;
 
-            const formattedDate = formatDate(blog.date);
-            const safeCategory = escapeHtml(blog.category);
-            const labelFr = escapeHtml(categoryLabels[blog.category]?.fr || blog.category);
-            const labelEn = escapeHtml(categoryLabels[blog.category]?.en || blog.category);
+    if (isAdmin) {
+      postModalBody.querySelector('.delete-post-btn')?.addEventListener('click', () => {
+        window.deletePostAndClose(blog.id);
+      });
+    }
 
-            card.innerHTML = `
-                <div class="card-category" data-category="${safeCategory}">
-                    <span data-fr="${labelFr}"
-                          data-en="${labelEn}">
-                        ${labelFr}
-                    </span>
-                </div>
-                <h3 class="card-title">${escapeHtml(blog.title)}</h3>
-                <p class="card-content">${escapeHtml(blog.content)}</p>
-                <div class="card-footer">
-                    <span class="card-date">${formattedDate}</span>
-                    <span class="read-more" data-fr="Lire plus" data-en="Read more">Lire plus</span>
-                </div>
-            `;
+    postModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
 
-            return card;
-        }
+  function closePostModal() {
+    postModal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+  window.closePostModal = closePostModal;
 
-        // ===== POST MODAL FUNCTIONS =====
-        function openPost(id) {
-            const blog = blogsCache.find(b => b.id === id);
-            if (!blog) return;
+  async function deletePostAndClose(id) {
+    const lang = localStorage.getItem('siteLang') || 'fr';
+    if (confirm(lang === 'en' ? 'Delete this post?' : 'Supprimer cet article ?')) {
+      await deleteBlog(id);
+      closePostModal();
+    }
+  }
+  window.deletePostAndClose = deletePostAndClose;
 
-            const formattedDate = formatDate(blog.date);
-            const savedLang = localStorage.getItem('siteLang') || 'fr';
+  // ===== AUTH =====
+  function showLoginModal() {
+    loginModal.classList.remove('hidden');
+    document.getElementById('email').focus();
+  }
 
-            const safeCategory = escapeHtml(blog.category);
-            const labelFr = escapeHtml(categoryLabels[blog.category]?.fr || blog.category);
-            const labelEn = escapeHtml(categoryLabels[blog.category]?.en || blog.category);
-            const labelCurrent = escapeHtml(categoryLabels[blog.category]?.[savedLang] || blog.category);
+  function closeLoginModal() {
+    loginModal.classList.add('hidden');
+    loginError.classList.add('hidden');
+    document.getElementById('email').value = '';
+    document.getElementById('password').value = '';
+  }
 
-            postModalBody.innerHTML = `
-                <div class="post-detail">
-                    <div class="card-category" data-category="${safeCategory}">
-                        <span data-fr="${labelFr}"
-                              data-en="${labelEn}">
-                            ${labelCurrent}
-                        </span>
-                    </div>
-                    <h2 class="post-title">${escapeHtml(blog.title)}</h2>
-                    <span class="post-date">${formattedDate}</span>
-                    <div class="post-content">${escapeHtml(blog.content).replace(/\n/g, '<br>')}</div>
-                    ${isAdmin ? `
-                        <div class="post-actions">
-                            <button class="delete-btn delete-btn-large" onclick="deletePostAndClose(${blog.id})" data-fr="Supprimer cet article" data-en="Delete this post">
-                                ${savedLang === 'fr' ? 'Supprimer cet article' : 'Delete this post'}
-                            </button>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
+  async function loginAdmin(user) {
+    isAdmin = true;
+    currentUser = user;
+    adminPanel.classList.remove('hidden');
+    adminBtn.classList.add('hidden');
+    closeLoginModal();
+    await renderBlogs();
+  }
 
-            postModal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
+  async function logoutAdmin() {
+    const { error } = await supabase.auth.signOut();
+    if (error) { console.error('Logout error:', error); return; }
+    isAdmin = false;
+    currentUser = null;
+    adminPanel.classList.add('hidden');
+    adminBtn.classList.remove('hidden');
+    await renderBlogs();
+  }
 
-        function closePostModal() {
-            postModal.classList.add('hidden');
-            document.body.style.overflow = '';
-        }
+  async function checkAuth() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) await loginAdmin(session.user);
+  }
 
-        async function deletePostAndClose(id) {
-            if (confirm(localStorage.getItem('siteLang') === 'en' ? 'Delete this post?' : 'Supprimer cet article ?')) {
-                await deleteBlog(id);
-                closePostModal();
-            }
-        }
+  // ===== LANGUAGE =====
+  function toggleLang() {
+    const cur = localStorage.getItem('siteLang') || 'fr';
+    const next = cur === 'fr' ? 'en' : 'fr';
+    applyLang(next);
+    localStorage.setItem('siteLang', next);
+  }
 
-        function escapeHtml(text) {
-            return String(text)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
+  function applyLang(lang) {
+    document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+      el.textContent = el.getAttribute('data-' + lang);
+    });
+    document.documentElement.lang = lang;
+    const d = document.getElementById('lang-display');
+    const t = document.getElementById('lang-tip');
+    if (d) d.textContent = lang.toUpperCase();
+    if (t) t.textContent = lang === 'fr' ? 'Switch to English' : 'Passer en français';
+  }
 
-        // ===== ADMIN FUNCTIONS =====
-        function showModal() {
-            loginModal.classList.remove('hidden');
-            document.getElementById('email').focus();
-        }
+  // ===== EVENTS =====
+  adminBtn.addEventListener('click', showLoginModal);
+  logoutBtn.addEventListener('click', logoutAdmin);
 
-        function closeModal() {
-            loginModal.classList.add('hidden');
-            loginError.classList.add('hidden');
-            document.getElementById('email').value = '';
-            document.getElementById('password').value = '';
-        }
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      loginError.classList.remove('hidden');
+      document.getElementById('password').value = '';
+    } else {
+      await loginAdmin(data.user);
+    }
+  });
 
-        async function loginAdmin(user) {
-            isAdmin = true;
-            currentUser = user;
-            adminPanel.classList.remove('hidden');
-            adminBtn.classList.add('hidden');
-            closeModal();
-            await renderBlogs();
-        }
+  blogForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title    = document.getElementById('postTitle').value;
+    const content  = document.getElementById('postContent').value;
+    const category = document.getElementById('postCategory').value;
+    await addBlog(title, content, category);
+    blogForm.reset();
+    await renderBlogs();
+  });
 
-        async function logoutAdmin() {
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-                console.error('Logout error:', error);
-                return;
-            }
-            isAdmin = false;
-            currentUser = null;
-            adminPanel.classList.add('hidden');
-            adminBtn.classList.remove('hidden');
-            await renderBlogs();
-        }
+  document.getElementById('loginModalClose').addEventListener('click', closeLoginModal);
+  document.getElementById('postModalClose').addEventListener('click', closePostModal);
 
-        // Check if user is already logged in
-        async function checkAuth() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-                await loginAdmin(session.user);
-            }
-        }
+  loginModal.addEventListener('click', (e) => { if (e.target === loginModal) closeLoginModal(); });
+  postModal.addEventListener('click',  (e) => { if (e.target === postModal)  closePostModal();  });
 
-        // ===== EVENT LISTENERS =====
-        adminBtn.addEventListener('click', showModal);
-        logoutBtn.addEventListener('click', logoutAdmin);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (!loginModal.classList.contains('hidden')) closeLoginModal();
+      if (!postModal.classList.contains('hidden'))  closePostModal();
+    }
+  });
 
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+  // ===== INIT =====
+  const ro = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } });
+  }, { threshold: 0.08 });
 
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
-
-            if (error) {
-                console.error('Login error:', error);
-                loginError.classList.remove('hidden');
-                document.getElementById('password').value = '';
-            } else {
-                await loginAdmin(data.user);
-            }
-        });
-
-        blogForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            console.log('Form submitted!');
-
-            const title = document.getElementById('postTitle').value;
-            const content = document.getElementById('postContent').value;
-            const category = document.getElementById('postCategory').value;
-
-            console.log('Post data:', { title, content, category });
-
-            const result = await addBlog(title, content, category);
-            console.log('Add result:', result);
-
-            blogForm.reset();
-            await renderBlogs();
-        });
-
-        // Close modal on outside click
-        loginModal.addEventListener('click', (e) => {
-            if (e.target === loginModal) {
-                closeModal();
-            }
-        });
-
-        postModal.addEventListener('click', (e) => {
-            if (e.target === postModal) {
-                closePostModal();
-            }
-        });
-
-        // Close modal on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                if (!loginModal.classList.contains('hidden')) {
-                    closeModal();
-                }
-                if (!postModal.classList.contains('hidden')) {
-                    closePostModal();
-                }
-            }
-        });
-
-        // ===== LANGUAGE FUNCTIONS =====
-        function switchLang(lang) {
-            localStorage.setItem('siteLang', lang);
-            applyLang(lang);
-        }
-
-        function applyLang(lang) {
-            document.querySelectorAll('[data-fr][data-en]').forEach(el => {
-                el.textContent = el.getAttribute('data-' + lang);
-            });
-            document.querySelectorAll('.lang-switcher button').forEach(btn => {
-                btn.classList.remove('active');
-                if ((lang === 'fr' && btn.textContent === 'FR') || (lang === 'en' && btn.textContent === 'EN')) {
-                    btn.classList.add('active');
-                }
-            });
-            document.documentElement.lang = lang;
-        }
-
-        // ===== INITIALIZATION =====
-        document.addEventListener('DOMContentLoaded', async () => {
-            const savedLang = localStorage.getItem('siteLang') || 'fr';
-            applyLang(savedLang);
-            await checkAuth(); // Check if already logged in
-            await renderBlogs();
-        });
-    </script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    applyLang(localStorage.getItem('siteLang') || 'fr');
+    document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+    document.getElementById('lang-btn').addEventListener('click', toggleLang);
+    await checkAuth();
+    await renderBlogs();
+  });
+</script>
 </body>
 </html>
